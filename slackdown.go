@@ -99,6 +99,11 @@ func (r *Renderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.Walk
 	case bf.Item:
 		if entering {
 			r.out(w, spaceBytes)
+			for i := 1; i < itemLevel; i++ {
+				r.out(w, spaceBytes)
+				r.out(w, spaceBytes)
+				r.out(w, spaceBytes)
+			}
 			r.out(w, itemTag)
 			r.out(w, spaceBytes)
 		} else {
@@ -112,10 +117,10 @@ func (r *Renderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.Walk
 	case bf.List:
 		if entering {
 			itemLevel++
+			r.cr(w)
 		} else {
 			itemLevel--
 			if itemLevel == 0 {
-				r.cr(w)
 				r.cr(w)
 			}
 		}

@@ -52,18 +52,31 @@ func TestList(t *testing.T) {
 	tdt := []testData{
 		{
 			input:      "* list1\n* list2\n* list 3\n",
-			expected:   " - list1\n - list2\n - list 3\n\n\n",
-			extensions: bf.CommonExtensions,
-		},
-		{
-			input:      "* list1\n* list2\n  * list 3\n  * list 4\n* list 5\n",
-			expected:   " - list1\n - list2\n - list 3\n - list 4\n - list 5\n\n\n",
+			expected:   " - list1\n - list2\n - list 3\n\n",
 			extensions: bf.CommonExtensions,
 		},
 	}
 
 	runTest(t, tdt)
 }
+
+func TestNestedList(t *testing.T) {
+	tdt := []testData{
+		{
+			input:      "* list1\n* list2\n  * list3\n  * list4",
+			expected:   " - list1\n - list2\n    - list3\n    - list4\n\n\n",
+			extensions: bf.CommonExtensions,
+		},
+		{
+			input:      "* list1\n* list2\n  * list3\n  * list4\n* list5",
+			expected:   " - list1\n - list2\n    - list3\n    - list4\n\n - list5\n\n",
+			extensions: bf.CommonExtensions,
+		},
+	}
+
+	runTest(t, tdt)
+}
+
 func TestDel(t *testing.T) {
 	tdt := []testData{
 		{
