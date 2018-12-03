@@ -77,6 +77,18 @@ func TestNestedList(t *testing.T) {
 	runTest(t, tdt)
 }
 
+func TestOrderedList(t *testing.T) {
+	tdt := []testData{
+		{
+			input:      "1. list1\n2. list2\n3. list3\n4. list4",
+			expected:   " 1. list1\n 2. list2\n 3. list3\n 4. list4\n\n",
+			extensions: bf.CommonExtensions,
+		},
+	}
+
+	runTest(t, tdt)
+}
+
 func TestDel(t *testing.T) {
 	tdt := []testData{
 		{

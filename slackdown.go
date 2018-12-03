@@ -3,6 +3,7 @@ package slackdown
 import (
 	"bytes"
 	"io"
+	"strconv"
 
 	bf "gopkg.in/russross/blackfriday.v2"
 )
@@ -14,6 +15,8 @@ type Renderer struct {
 }
 
 var itemLevel = 0
+
+var itemListMap = make(map[int]int)
 
 var (
 	strongTag        = []byte("*")
@@ -104,7 +107,12 @@ func (r *Renderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.Walk
 				r.out(w, spaceBytes)
 				r.out(w, spaceBytes)
 			}
-			r.out(w, itemTag)
+			if node.ListFlags&bf.ListTypeOrdered != 0 {
+				r.out(w, append([]byte(strconv.Itoa(itemListMap[itemLevel])), node.ListData.Delimiter))
+				itemListMap[itemLevel]++
+			} else {
+				r.out(w, itemTag)
+			}
 			r.out(w, spaceBytes)
 		} else {
 			r.cr(w)
@@ -118,7 +126,13 @@ func (r *Renderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.Walk
 		if entering {
 			itemLevel++
 			r.cr(w)
+			if node.ListFlags&bf.ListTypeOrdered != 0 {
+				itemListMap[itemLevel] = 1
+			}
 		} else {
+			if node.ListFlags&bf.ListTypeOrdered != 0 {
+				delete(itemListMap, itemLevel)
+			}
 			itemLevel--
 			if itemLevel == 0 {
 				r.cr(w)
