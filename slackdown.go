@@ -159,6 +159,7 @@ func (r *Renderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.Walk
 		}
 		break
 	case bf.Strong:
+		r.out(w, strongTag)
 		break
 	case bf.Del:
 		r.out(w, strikethroughTag)

@@ -112,3 +112,15 @@ func TestLink(t *testing.T) {
 
 	runTest(t, tdt)
 }
+
+func TestBold(t *testing.T) {
+	tdt := []testData{
+		{
+			input:      "**bold text**",
+			expected:   "*bold text*\n\n",
+			extensions: bf.CommonExtensions,
+		},
+	}
+
+	runTest(t, tdt)
+}
