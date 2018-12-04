@@ -40,7 +40,7 @@ func TestCode(t *testing.T) {
 	tdt := []testData{
 		{
 			input:      "this is `foo`.",
-			expected:   "this is `foo`.",
+			expected:   "this is `foo`.\n\n",
 			extensions: bf.CommonExtensions,
 		},
 	}
@@ -64,12 +64,12 @@ func TestNestedList(t *testing.T) {
 	tdt := []testData{
 		{
 			input:      "* list1\n* list2\n  * list3\n  * list4",
-			expected:   " - list1\n - list2\n    - list3\n    - list4\n\n\n",
+			expected:   " - list1\n - list2\n    - list3\n    - list4\n\n",
 			extensions: bf.CommonExtensions,
 		},
 		{
 			input:      "* list1\n* list2\n  * list3\n  * list4\n* list5",
-			expected:   " - list1\n - list2\n    - list3\n    - list4\n\n - list5\n\n",
+			expected:   " - list1\n - list2\n    - list3\n    - list4\n - list5\n\n",
 			extensions: bf.CommonExtensions,
 		},
 	}
@@ -93,7 +93,19 @@ func TestDel(t *testing.T) {
 	tdt := []testData{
 		{
 			input:      "~~del text~~",
-			expected:   "~del text~",
+			expected:   "~del text~\n\n",
+			extensions: bf.CommonExtensions,
+		},
+	}
+
+	runTest(t, tdt)
+}
+
+func TestLink(t *testing.T) {
+	tdt := []testData{
+		{
+			input:      "[google.at](http://www.google.at)",
+			expected:   "<http://www.google.at|google.at>\n\n",
 			extensions: bf.CommonExtensions,
 		},
 	}

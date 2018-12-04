@@ -24,6 +24,9 @@ var (
 	itemTag          = []byte("-")
 	codeTag          = []byte("`")
 	codeBlockTag     = []byte("```")
+	linkTag          = []byte("<")
+	linkCloseTag     = []byte(">")
+	pipeSign         = []byte("|")
 )
 
 var (
@@ -114,18 +117,24 @@ func (r *Renderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.Walk
 				r.out(w, itemTag)
 			}
 			r.out(w, spaceBytes)
-		} else {
-			r.cr(w)
 		}
 		break
 	case bf.Link:
+		if entering {
+			r.out(w, linkTag)
+			if dest := node.LinkData.Destination; dest != nil {
+				r.out(w, dest)
+				r.out(w, pipeSign)
+			}
+		} else {
+			r.out(w, linkCloseTag)
+		}
 		break
 	case bf.HorizontalRule:
 		break
 	case bf.List:
 		if entering {
 			itemLevel++
-			r.cr(w)
 			if node.ListFlags&bf.ListTypeOrdered != 0 {
 				itemListMap[itemLevel] = 1
 			}
@@ -142,6 +151,12 @@ func (r *Renderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.Walk
 	case bf.Document:
 		break
 	case bf.Paragraph:
+		if !entering {
+			if node.Parent.Type != bf.Item {
+				r.cr(w)
+			}
+			r.cr(w)
+		}
 		break
 	case bf.Strong:
 		break
