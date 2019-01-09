@@ -164,6 +164,10 @@ func (r *Renderer) RenderNode(w io.Writer, node *bf.Node, entering bool) bf.Walk
 	case bf.Del:
 		r.out(w, strikethroughTag)
 		break
+	case bf.HTMLBlock:
+		break
+	case bf.HTMLSpan:
+		break
 	case bf.Table:
 		break
 	case bf.TableCell:
