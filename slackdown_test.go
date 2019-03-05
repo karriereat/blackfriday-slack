@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/karriereat/blackfriday-slack"
-	bf "gopkg.in/russross/blackfriday.v2"
+	bf "github.com/russross/blackfriday/v2"
 )
 
 type testData struct {
